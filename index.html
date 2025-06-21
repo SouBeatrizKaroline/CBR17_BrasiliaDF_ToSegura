@@ -384,6 +384,32 @@
                 max-width: calc(100% - 40px);
             }
         }
+
+}
+/* Animações */
+@keyframes pulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.7;
+    }
+    70% {
+        transform: scale(1.3);
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+.active .pulse-ring {
+    animation: pulse 2s infinite;
+}
+.active .location-icon {
+    background: #ff6b9d;
+}
+.active .location-icon i {
+    color: white;
+}
+
     </style>
 </head>
 <body>
@@ -445,35 +471,45 @@
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-title">
-                <i class="fas fa-shield-alt"></i>
-                <h2>Compartilhar Localização</h2>
-            </div>
-            <div class="safety-status">
-                <label class="toggle-container">
-                    <input type="checkbox" id="safetyToggle" onchange="toggleSafetyMode()">
-                    <span class="slider"></span>
-                </label>
-                <span id="safetyStatusText" class="status-text inactive-status">Localização não compartilhada</span>
-            </div>
-            <div id="safetyActiveContent" style="display: none;">
-                <p>Você está compartilhando sua localização em tempo real com seus contatos de confiança.</p>
-                <div class="trusted-contacts">
-                    <h3>Pessoas de Confiança</h3>
-                    <div class="contacts-list" id="trustedContacts">
-                        <div class="no-contacts">
-                            <p>Nenhum contato adicionado ainda</p>
-                        </div>
-                    </div>
-                    <button class="add-contact-btn" onclick="showAddContactModal()">
-                        <i class="fas fa-plus"></i>
-                        Adicionar contato
-                    </button>
-                </div>
+        <div class="card safety-card">
+    <div class="card-title">
+        <i class="fas fa-shield-alt safety-icon"></i>
+        <h2>Compartilhar Localização</h2>
+    </div>
+    
+    <div class="safety-status-container">
+        <div class="safety-visual">
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring delay-1"></div>
+            <div class="location-icon">
+                <i class="fas fa-location-dot" id="locationIcon"></i>
             </div>
         </div>
+        
+        <div class="safety-info">
+            <h3 id="safetyStatusText">Localização não compartilhada</h3>
+            <p id="safetyStatusDescription">Ative para compartilhar seu trajeto em tempo real</p>
+            
+            <button class="safety-toggle-btn" id="safetyToggle">
+                <span class="toggle-switch"></span>
+                <span class="toggle-label">Ativar Modo Segurança</span>
+            </button>
+        </div>
     </div>
+    <div class="trusted-contacts-section" id="trustedContactsSection">
+        <div class="section-header">
+            <h3><i class="fas fa-user-shield"></i> Pessoas de Confiança</h3>
+            <button class="add-contact-btn" onclick="showAddContactModal()">
+                <i class="fas fa-plus-circle"></i> Adicionar
+            </button>
+        </div>
+        
+        <div class="contacts-list" id="trustedContacts">
+            <div class="empty-contacts">
+                <i class="fas fa-user-plus"></i>
+                <p>Adicione contatos para compartilhar seu trajeto</p>
+            </div>
+
 
     <script>
         function verificar() {
@@ -553,6 +589,29 @@
         
         // Verifica ao carregar a página
         document.addEventListener('DOMContentLoaded', verificar);
+
+// Animação do toggle
+document.getElementById('safetyToggle').addEventListener('click', function() {
+    this.classList.toggle('active');
+    const isActive = this.classList.contains('active');
+    
+    const statusText = document.getElementById('safetyStatusText');
+    const statusDesc = document.getElementById('safetyStatusDescription');
+    const contactsSection = document.getElementById('trustedContactsSection');
+    const locationIcon = document.getElementById('locationIcon');
+    
+    if(isActive) {
+        statusText.textContent = "Localização compartilhada";
+        statusDesc.textContent = "Pessoas de confiança podem ver seu trajeto";
+        contactsSection.style.display = 'block';
+        document.querySelector('.safety-visual').classList.add('active');
+    } else {
+        statusText.textContent = "Localização não compartilhada";
+        statusDesc.textContent = "Ative para compartilhar seu trajeto em tempo real";
+        contactsSection.style.display = 'none';
+        document.querySelector('.safety-visual').classList.remove('active');
+    }
+});
     </script>
 </body>
 </html>
