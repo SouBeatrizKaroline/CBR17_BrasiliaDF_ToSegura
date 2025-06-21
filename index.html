@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ponto Seguro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4cc9f0;
+            --secondary: #3a0ca3;
+            --success: #2ecc71;
+            --danger: #f72585;
+            --warning: #ff9f1c;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --pink: #ff6b9d;
+            --pink-light: #ff8fab;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo-icon {
+            font-size: 2.8rem;
+            color: var(--primary);
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--gray);
+            font-weight: 300;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--primary-light));
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+        }
+
+        .card-title i {
+            font-size: 1.8rem;
+        }
+
+        .places-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .place-item {
+            padding: 1.2rem;
+            border-radius: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            background-color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--light-gray);
+        }
+
+        .place-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-color: rgba(67, 97, 238, 0.2);
+        }
+
+        .place-icon {
+            font-size: 1.8rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: rgba(67, 97, 238, 0.1);
+            flex-shrink: 0;
+        }
+
+        .open .place-icon {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .closed .place-icon {
+            background-color: rgba(247, 37, 133, 0.1);
+        }
+
+        .open {
+            color: var(--success);
+        }
+
+        .closed {
+            color: var(--danger);
+        }
+
+        .place-info {
+            flex: 1;
+        }
+
+        .place-name {
+            font-weight: 500;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .place-distance {
+            font-size: 0.9rem;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .place-distance i {
+            font-size: 0.8rem;
+        }
+
+        .no-places {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem 2rem;
+            background-color: white;
+            border-radius: 0.8rem;
+            margin: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: 1px dashed var(--light-gray);
+        }
+
+        .no-places i {
+            font-size: 3.5rem;
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            opacity: 0.5;
+        }
+
+        .no-places h3 {
+            color: var(--dark);
+            margin-bottom: 0.8rem;
+            font-size: 1.4rem;
+        }
+
+        .no-places p {
+            color: var(--gray);
+            max-width: 500px;
+            margin: 0 auto;
+            font-size: 0.95rem;
+        }
+
+        .bus-status-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        #status {
+            font-size: 1.4rem;
+            margin: 1.5rem 0;
+            padding: 1.2rem;
+            border-radius: 0.8rem;
+            background-color: white;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--light-gray);
+        }
+
+        .arriving {
+            background-color: rgba(76, 201, 240, 0.1) !important;
+            color: var(--secondary);
+            animation: pulse 1.5s infinite;
+            border-color: rgba(76, 201, 240, 0.3) !important;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+        }
+
+        .loading {
+            display: none;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+            color: var(--gray);
+        }
+
+        .loading.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 1.2rem;
+            height: 1.2rem;
+            border: 3px solid rgba(67, 97, 238, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.2rem 1.8rem;
+            border-radius: 0.8rem;
+            box-shadow: var(--shadow-hover);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-origin: bottom right;
+        }
+
+        .notification i {
+            font-size: 1.5rem;
+        }
+
+        .notification-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .notification-message {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideOut {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(100px); }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .places-list {
+                grid-template-columns: 1fr;
+            }
+
+            .notification {
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+                max-width: calc(100% - 40px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-bus-alt logo-icon"></i>
+                <h1>Ponto Seguro</h1>
+            </div>
+            <p class="subtitle">Sua segurança em primeiro lugar - encontre pontos seguros e compartilhe sua localização com pessoas de confiança</p>
+        </header>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-map-marker-alt"></i>
+                <h2>Locais Seguros Próximos</h2>
+            </div>
+            <div class="places-list">
+                {% if locais and locais.length > 0 %}
+                    {% for local in locais %}
+                    <div class="place-item {% if local.aberto %}open{% else %}closed{% endif %}">
+                        <div class="place-icon">
+                            <i class="fas {% if local.aberto %}fa-lock-open{% else %}fa-lock{% endif %}"></i>
+                        </div>
+                        <div class="place-info">
+                            <div class="place-name">{{ local.nome }}</div>
+                            <div class="place-distance">
+                                <i class="fas fa-route"></i>
+                                {{ local.distancia }} de distância
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-places">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <h3>Nenhum local seguro disponível no momento</h3>
+                        <p>Estamos atualizando nossa lista de locais seguros. Por favor, verifique novamente mais tarde ou tente em outra localização.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-bus"></i>
+                <h2>Status do Ônibus</h2>
+            </div>
+            <div class="bus-status-container">
+                <div id="status">Buscando atualizações...</div>
+                <button class="refresh-btn" onclick="verificar()">
+                    <i class="fas fa-sync-alt"></i>
+                    Atualizar Status
+                </button>
+                <div id="loading" class="loading">
+                    <div class="spinner"></div>
+                    <span>Buscando informações atualizadas...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-shield-alt"></i>
+                <h2>Compartilhar Localização</h2>
+            </div>
+            <div class="safety-status">
+                <label class="toggle-container">
+                    <input type="checkbox" id="safetyToggle" onchange="toggleSafetyMode()">
+                    <span class="slider"></span>
+                </label>
+                <span id="safetyStatusText" class="status-text inactive-status">Localização não compartilhada</span>
+            </div>
+            <div id="safetyActiveContent" style="display: none;">
+                <p>Você está compartilhando sua localização em tempo real com seus contatos de confiança.</p>
+                <div class="trusted-contacts">
+                    <h3>Pessoas de Confiança</h3>
+                    <div class="contacts-list" id="trustedContacts">
+                        <div class="no-contacts">
+                            <p>Nenhum contato adicionado ainda</p>
+                        </div>
+                    </div>
+                    <button class="add-contact-btn" onclick="showAddContactModal()">
+                        <i class="fas fa-plus"></i>
+                        Adicionar contato
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function verificar() {
+            const statusElement = document.getElementById('status');
+            const loadingElement = document.getElementById('loading');
+            
+            // Mostra o loading
+            loadingElement.classList.add('active');
+            statusElement.textContent = "Buscando atualizações...";
+            
+            // Simula uma requisição (substitua pelo seu fetch real)
+            setTimeout(() => {
+                fetch('/verificar_onibus')
+                    .then(response => response.json())
+                    .then(data => {
+                        statusElement.textContent = data.status;
+                        
+                        if (data.status.includes('chegando')) {
+                            statusElement.classList.add('arriving');
+                            showNotification("Ônibus chegando!", data.status);
+                        }
+                    })
+                    .catch(error => {
+                        statusElement.textContent = "Erro ao buscar status. Tente novamente.";
+                        console.error('Error:', error);
+                    })
+                    .finally(() => {
+                        loadingElement.classList.remove('active');
+                    });
+            }, 1000);
+        }
+
+        function toggleSafetyMode() {
+            const toggle = document.getElementById('safetyToggle');
+            const statusText = document.getElementById('safetyStatusText');
+            const safetyActiveContent = document.getElementById('safetyActiveContent');
+
+            if (toggle.checked) {
+                statusText.textContent = "Localização compartilhada";
+                safetyActiveContent.style.display = "block";
+                // Aqui você pode adicionar a lógica para ativar o compartilhamento de localização
+            } else {
+                statusText.textContent = "Localização não compartilhada";
+                safetyActiveContent.style.display = "none";
+                // Aqui você pode adicionar a lógica para desativar o compartilhamento de localização
+            }
+        }
+
+        function showNotification(title, message) {
+            // Remove notificações existentes
+            document.querySelectorAll('.notification').forEach(el => el.remove());
+            
+            // Cria uma nova notificação
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `
+                <i class="fas fa-bell"></i>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remove após 5 segundos
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.5s forwards';
+                setTimeout(() => {
+                    notification.remove();
+                }, 500);
+            }, 5000);
+        }
+
+        // Verifica automaticamente a cada 30 segundos
+        setInterval(verificar, 30000);
+        
+        // Verifica ao carregar a página
+        document.addEventListener('DOMContentLoaded', verificar);
+    </script>
+</body>
+</html>
